@@ -11,11 +11,12 @@ import (
 )
 
 var (
-	NodeId  string
-	Network objects.BitcoinNetwork
-	Client  *services.LightsparkClient
-	Seed    []byte
-	Account *objects.Account
+	NodeId    string
+	Network   objects.BitcoinNetwork
+	Client    *services.LightsparkClient
+	Seed      []byte
+	SeedRevoc []byte
+	Account   *objects.Account
 )
 
 func Init() {
@@ -26,10 +27,17 @@ func Init() {
 	baseUrl := os.Getenv("LS_BASE_URL")
 	NodeId = os.Getenv("LS_NODE_ID")
 	// hardcode network to mainnet for now
-	Network = objects.BitcoinNetworkMainnet
+	Network = objects.BitcoinNetworkRegtest
 
 	mnemonicSlice := strings.Split(os.Getenv("WORDS"), " ")
 	Seed, err = lightspark_crypto.MnemonicToSeed(mnemonicSlice)
+	if err != nil {
+		log.Fatalf("mnemonic to seed failed: %v", err)
+		return
+	}
+
+	mnemonicSliceRevoc := strings.Split(os.Getenv("WORDS_REVOC"), " ")
+	SeedRevoc, err = lightspark_crypto.MnemonicToSeed(mnemonicSliceRevoc)
 	if err != nil {
 		log.Fatalf("mnemonic to seed failed: %v", err)
 		return

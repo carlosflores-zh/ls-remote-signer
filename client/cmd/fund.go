@@ -12,7 +12,9 @@ var fundCmd = &cobra.Command{
 	Short: "Execute fundNode operation, to fund a node with 10,000,000 sats in testnet",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		depositAmount, err := Client.FundNode(NodeId, 10000000) // 10,000,000 sats
+		log.Printf("Funding node: %v\n", NodeId)
+
+		depositAmount, err := Client.FundNode(NodeId, 200000) // 10,000,000 sats
 		if err != nil {
 			log.Printf("fund node failed: %v", err)
 			return
