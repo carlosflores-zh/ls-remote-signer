@@ -11,7 +11,7 @@ var getAccountCmd = &cobra.Command{
 	Short: "Prints the account name",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-
+		log.Printf("Your account id is: %v.\n", Account.Id)
 		log.Printf("Your account name is: %v.\n", *Account.Name)
 		log.Printf("Your nodeID is: %v.\n", NodeId)
 
