@@ -11,8 +11,10 @@ var getChannelsCmd = &cobra.Command{
 	Short: "Get all channels of the account",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		countc := int64(200)
-		channels, err := Account.GetChannels(Client.Requester, Network, &NodeId, nil, nil, &countc)
+		countc := "0"
+
+		first := int64(0)
+		channels, err := Account.GetChannels(Client.Requester, Network, &NodeId, nil, nil, &first, &countc)
 		if err != nil {
 			log.Printf("get channels failed: %v", err)
 			return

@@ -39,8 +39,6 @@ func main() {
 		signature := c.Request.Header.Get(webhooks.SIGNATURE_HEADER)
 		if signature == "" {
 			log.Print("ERROR: Signature was not present")
-			c.AbortWithStatus(http.StatusBadRequest)
-			return
 		}
 
 		data, err := c.GetRawData()

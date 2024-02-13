@@ -1,11 +1,8 @@
 package cmd
 
 import (
-	lightspark_crypto "github.com/lightsparkdev/lightspark-crypto-uniffi/lightspark-crypto-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"os"
-	"strings"
 )
 
 // payInvoiceCmd represents the payInvoice command
@@ -18,8 +15,6 @@ var payInvoiceCmd = &cobra.Command{
 			log.Printf("Please provide an invoice")
 			return
 		}
-
-		defaultAmount := int64(0)
 
 		invoice := args[0]
 
@@ -34,25 +29,7 @@ var payInvoiceCmd = &cobra.Command{
 			invoice = *invoiceTest
 		}
 
-		lnFees, err := Client.GetLightningFeeEstimateForInvoice(NodeId, invoice, &defaultAmount)
-		if err != nil {
-			log.Printf("get node wallet failed: %v", err)
-			return
-		}
-
-		log.Printf("Fee estimate: %v\n", lnFees.FeeEstimate.OriginalValue)
-		log.Println(NodeId)
-
-		mnemonicSlice := strings.Split(os.Getenv("WORDS"), " ")
-
-		log.Printf("Mnemonic: %v\n", mnemonicSlice)
-		Seed, err = lightspark_crypto.MnemonicToSeed(mnemonicSlice)
-		if err != nil {
-			log.Fatalf("mnemonic to seed failed: %v", err)
-			return
-		}
-
-		outgoingPayment, err := Client.PayInvoice(NodeId, invoice, 1000, lnFees.FeeEstimate.OriginalValue, nil)
+		outgoingPayment, err := Client.PayInvoice(NodeId, invoice, 1000, 10000, nil)
 		if err != nil {
 			log.Printf("pay invoice failed: %v", err)
 			return

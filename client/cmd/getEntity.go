@@ -18,6 +18,7 @@ var getEntityCmd = &cobra.Command{
 			fmt.Printf("getEntity requires an entity ID")
 			return
 		}
+
 		entityID := args[0]
 
 		entity, err := Client.GetEntity(entityID)
@@ -32,6 +33,12 @@ var getEntityCmd = &cobra.Command{
 			if outgoingPayment.FailureMessage != nil {
 				log.Printf("FailureMessage: %+v\n", outgoingPayment.FailureMessage)
 			}
+		} else if (*entity).GetTypename() == "WithdrawalRequest" {
+			withdrawalRequest := (*entity).(objects.WithdrawalRequest)
+			log.Printf("%s > %s > %s \n", withdrawalRequest.GetTypename(), withdrawalRequest.GetId(), withdrawalRequest.Status.StringValue())
+			log.Printf("IncomingPayment struct: %+v\n", withdrawalRequest)
+		} else {
+			fmt.Printf("entity: %+v\n", *entity)
 		}
 	},
 }
